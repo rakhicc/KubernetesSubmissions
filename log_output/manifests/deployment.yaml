@@ -14,4 +14,7 @@ spec:
     spec:
       containers:
         - name: log-output
-          image: rakhicc/log-output-node
+          image: rakhicc/log-output-node:v2
+          env:
+            - name: PORT
+              value: "3000"
