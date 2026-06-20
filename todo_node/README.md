@@ -9,3 +9,5 @@ to run the application execute the following command
 now check in browser http://localhost:8080
 # kubectl apply -f manifests/service.yaml
 now in browser access the application using: http://localhost:8082/
+# added ingress.yaml file
+access the application in browser: http://localhost:8081/
