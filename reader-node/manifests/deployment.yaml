@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: readwrite-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: readwrite-app
+  template:
+    metadata:
+      labels:
+        app: readwrite-app
+    spec:
+      volumes:
+        - name: shared-image
+          emptyDir: {}
+      containers:
+        - name: writer
+          image: rakhicc/log-writer:v3
+          volumeMounts:
+          - name: shared-image
+            mountPath: /data
+        - name: reader
+          image: rakhicc/log-reader:v1
+          volumeMounts:
+          - name: shared-image
+            mountPath: /data
