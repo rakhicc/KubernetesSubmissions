@@ -9,3 +9,8 @@ created an endpoint /status to output timestamp and ramdom string
 kubectl apply -f manifests :run this command to apply the service and ingress.
 In the browser go to the resource to see the result.
 http://localhost:8081/status
+
+# added persistence volume and claim yaml files to mount persistence volume.
+mountpath is /data which is shared between the counter app and log_output app.
+accessing the resource http://localhost:8081/ shows result which includes timestamp, random string and the counter value.
+

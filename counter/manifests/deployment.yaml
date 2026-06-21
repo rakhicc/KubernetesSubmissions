@@ -12,9 +12,16 @@ spec:
       labels:
         app: ping-pong
     spec:
+      volumes:
+        - name: shared-count
+          persistentVolumeClaim:
+            claimName: image-claim
       containers:
         - name: ping-pong
-          image: rakhicc/ping-pong:v1
+          image: rakhicc/ping-pong:v2
+          volumeMounts:
+          - name: shared-count
+            mountPath: /data
           env:
             - name: PORT
               value: "3001"

@@ -1,33 +1,31 @@
 const http = require('http');
-const { v4: uuidv4 } = require('uuid');
-
-// Generate random string at startup
-const randomString = uuidv4();
+const fs = require('fs');
 
 const PORT = process.env.PORT || 3000;
+const filePath = '/data/count.txt';
 
-// Keep latest timestamp in memory
-let latestTimestamp = new Date().toISOString();
-
-// Update timestamp every 5 seconds (for logs)
-setInterval(() => {
-  latestTimestamp = new Date().toISOString();
-  console.log(`${latestTimestamp}: ${randomString}`);
-}, 5000);
+const randomString = Math.random().toString(36).substring(2);
 
 const server = http.createServer((req, res) => {
-  if (req.url === '/status') {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({
-      timestamp: latestTimestamp,
-      randomString: randomString
-    }));
-  } else {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Log Output App running');
+  if (req.url === '/') {
+    const timestamp = new Date().toISOString();
+
+    let count = 0;
+    try {
+      count = fs.readFileSync(filePath, 'utf8');
+    } catch (e) {
+      count = "0";
+    }
+
+    res.writeHead(200);
+    res.end(`${timestamp}: ${randomString}\nPing / Pongs: ${count}`);
+    return;
   }
+
+  res.writeHead(404);
+  res.end('Not Found');
 });
 
 server.listen(PORT, () => {
-  console.log(`Server started in port ${PORT}`);
+  console.log(`Log-output running on ${PORT}`);
 });

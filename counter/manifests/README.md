@@ -11,3 +11,7 @@ In the browser go to the below resource to see the result of counter app:
 http://localhost:8081/pingpong
 The ingress file is shared with log-output.
 In the browser go to the below resource to see the result of log-output  app : http://localhost:8081/status
+
+# added persistence volume and claim yaml files to mount persistence volume.
+mountpath is /data which is shared between the counter app and log_output app.
+count value is updated and written to count.txt file evry time when hitting the resource:http://localhost:8081/pingpong
