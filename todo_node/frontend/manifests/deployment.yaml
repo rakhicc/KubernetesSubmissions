@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: todobackend
+  name: todofrontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: todobackend
+      app: todofrontend
   template:
     metadata:
       labels:
-        app: todobackend
+        app: todofrontend
     spec:
       volumes:
         - name: shared-imagecache
           persistentVolumeClaim:
             claimName: image-claim
       containers:
-        - name: todobackend
-          image: rakhicc/todobackend:v1
+        - name: todofrontend
+          image: rakhicc/todofrontend:v1
           volumeMounts:
           - name: shared-imagecache
             mountPath: /data
           env:
             - name: PORT
-              value: "3002"
+              value: "3003"

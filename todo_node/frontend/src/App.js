@@ -12,7 +12,7 @@ function App() {
   }, []);
 
   const loadImage = () => {
-    setImageUrl("/api/image?t=" + Date.now());
+    setImageUrl("/image?t=" + Date.now());
   };
 
   return (
