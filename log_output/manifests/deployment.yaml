@@ -12,16 +12,9 @@ spec:
       labels:
         app: log-output
     spec:
-      volumes:
-        - name: shared-count
-          persistentVolumeClaim:
-            claimName: image-claim
       containers:
         - name: log-output
-          image: rakhicc/log-output-node:v3
-          volumeMounts:
-          - name: shared-count
-            mountPath: /data
+          image: rakhicc/log-output-node:v4
           env:
             - name: PORT
-              value: "3000"
+              value: "3008"
