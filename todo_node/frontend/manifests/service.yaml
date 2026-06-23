@@ -9,5 +9,5 @@ spec:
   ports:
     - name: http
       protocol: TCP
-      port: 1234 # This is a port that is available to the cluster, in this case it can be ~ anything
-      targetPort: 3003 # This is the target port
+      port: 80 # This is a port that is available to the cluster, in this case it can be ~ anything
+      targetPort: 80 # This is the target port

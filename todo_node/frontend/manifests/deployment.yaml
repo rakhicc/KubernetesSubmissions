@@ -13,15 +13,13 @@ spec:
         app: todofrontend
     spec:
       volumes:
-        - name: shared-imagecache
+        - name: shared-todocache
           persistentVolumeClaim:
-            claimName: image-claim
+            claimName: todo-claim
       containers:
         - name: todofrontend
           image: rakhicc/todofrontend:v1
           volumeMounts:
-          - name: shared-imagecache
+          - name: shared-todocache
             mountPath: /data
-          env:
-            - name: PORT
-              value: "3003"
+          
