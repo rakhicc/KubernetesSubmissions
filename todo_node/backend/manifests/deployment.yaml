@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: imagecachebackend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: imagecachebackend
+  template:
+    metadata:
+      labels:
+        app: imagecachebackend
+    spec:
+      volumes:
+        - name: shared-imagecache
+          persistentVolumeClaim:
+            claimName: image-claim
+      containers:
+        - name: ping-pong
+          image: rakhicc/ping-pong:v2
+          volumeMounts:
+          - name: shared-imagecache
+            mountPath: /data
+          env:
+            - name: PORT
+              value: "3001"
