@@ -15,7 +15,22 @@ spec:
     spec:
       containers:
         - name: log-output
-          image: rakhicc/log-output-node:v4
+          image: rakhicc/log-output-node:v7
           env:
             - name: PORT
               value: "3008"
+            - name: MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: log-output-config
+                  key: MESSAGE
+
+          volumeMounts:          # ✅ must be inside container
+            - name: config-volume
+              mountPath: /etc/config
+              readOnly: true
+
+      volumes:                  # ✅ same level as containers
+        - name: config-volume
+          configMap:
+            name: log-output-config
