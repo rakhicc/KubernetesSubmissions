@@ -5,17 +5,24 @@ const path = require('path');
 const cors = require('cors');
 
 const app = express();
-const PORT = 3000;
 
+// ✅ NO hardcoded values
+const PORT = process.env.PORT;
+const IMAGE_URL = process.env.IMAGE_URL;
+const DATA_DIR = process.env.DATA_DIR;
+const TEN_MIN = parseInt(process.env.IMAGE_CACHE_TIME, 10);
+
+console.log('port value from env ',PORT);
+console.log('IMAGE_URL value from env ',IMAGE_URL);
 // Enable CORS explicitly before defining any routes
 app.use(cors());
 
 // Construct robust absolute paths using path.join and __dirname
-const imagePath = path.join(__dirname, 'data', 'image.jpg');
-const metaPath = path.join(__dirname, 'data', 'meta.json');
-const TEN_MIN = 10 * 60 * 1000;
+const imagePath = path.join(__dirname, DATA_DIR, 'image.jpg');
+const metaPath = path.join(__dirname, DATA_DIR, 'meta.json');
 
-function fetchImage(url = 'https://picsum.photos/1200') {
+
+function fetchImage(url = IMAGE_URL) {
   return new Promise((resolve, reject) => {
     const dir = path.dirname(imagePath);
     if (!fs.existsSync(dir)){

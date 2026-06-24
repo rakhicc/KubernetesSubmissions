@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
+  const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
+const TODOS_PATH = process.env.REACT_APP_TODOS_PATH || "/todos";
+const IMAGE_PATH = process.env.REACT_APP_IMAGE_PATH || "/image";
   const [imageUrl, setImageUrl] = useState("");
   const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState([]);
   
 useEffect(() => {
-  fetch('/todos')
+  fetch(`${API_BASE}${TODOS_PATH}`)
     .then(res => {
       console.log("Response status:", res.status);
       return res.json();
@@ -28,7 +31,7 @@ useEffect(() => {
   }, []);
 
   const loadImage = () => {
-    setImageUrl("/image?t=" + Date.now());
+    setImageUrl(`${API_BASE}${IMAGE_PATH}?t=${Date.now()}`);
   };
 
 
@@ -40,7 +43,7 @@ useEffect(() => {
   };
 
   const handleSubmit = async () => {
-  await fetch('/todos', {
+  await fetch(`${API_BASE}${TODOS_PATH}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -51,7 +54,7 @@ useEffect(() => {
   setTodo('');
 
   // refresh list
-  const res = await fetch('/todos');
+  const res = await fetch(`${API_BASE}${TODOS_PATH}`);
   const data = await res.json();
   setTodos(data);
 };
