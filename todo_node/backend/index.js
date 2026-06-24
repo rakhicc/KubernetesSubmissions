@@ -72,6 +72,33 @@ app.get('/image', async (req, res) => {
   }
 });
 
+
+app.use(express.json());
+
+let todos = [
+  'Learn Kubernetes basics',
+  'Deploy application to cluster'
+];
+
+// ✅ GET todos
+app.get('/todos', (req, res) => {
+  console.log("Fetching todos:", todos);
+  res.json(todos);
+});
+
+// ✅ POST new todo
+app.post('/todos', (req, res) => {
+  const todo = req.body.todo;
+
+  if (!todo || todo.length > 140) {
+    return res.status(400).json({ error: 'Invalid todo' });
+  }
+
+  todos.push(todo);
+  res.status(201).json(todo);
+});
+
 app.listen(PORT, () => {
+  console.log('New logic initialized');
   console.log(`Backend running on ${PORT}`);
 });

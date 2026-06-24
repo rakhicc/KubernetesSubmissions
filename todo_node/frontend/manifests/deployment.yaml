@@ -18,7 +18,7 @@ spec:
             claimName: todo-claim
       containers:
         - name: todofrontend
-          image: rakhicc/todofrontend:v1
+          image: rakhicc/todofrontend:v3
           volumeMounts:
           - name: shared-todocache
             mountPath: /data

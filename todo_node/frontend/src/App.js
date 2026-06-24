@@ -4,6 +4,21 @@ import "./App.css";
 function App() {
   const [imageUrl, setImageUrl] = useState("");
   const [todo, setTodo] = useState("");
+  const [todos, setTodos] = useState([]);
+  
+useEffect(() => {
+  fetch('/todos')
+    .then(res => {
+      console.log("Response status:", res.status);
+      return res.json();
+    })
+    .then(data => {
+      console.log("Todos fetched:", data);
+      setTodos(data);
+    })
+    .catch(err => console.error("Error fetching todos:", err));
+}, []);
+
 
   useEffect(() => {
     loadImage();
@@ -16,11 +31,7 @@ function App() {
     setImageUrl("/image?t=" + Date.now());
   };
 
-  const todos = [
-    "Learn Kubernetes basics",
-    "Deploy application to cluster",
-    "Configure persistent volumes",
-  ];
+
 
   const handleChange = (e) => {
     if (e.target.value.length <= 140) {
@@ -28,10 +39,23 @@ function App() {
     }
   };
 
-  const handleSubmit = () => {
-    console.log("Todo submitted:", todo);
-    setTodo("");
-  };
+  const handleSubmit = async () => {
+  await fetch('/todos', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ todo })
+  });
+
+  setTodo('');
+
+  // refresh list
+  const res = await fetch('/todos');
+  const data = await res.json();
+  setTodos(data);
+};
+
 
   return (
     <div className="app-container">

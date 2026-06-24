@@ -6,6 +6,17 @@ spec:
   rules:
     - http:
         paths:
+
+          # ✅ Backend API
+          - path: /todos
+            pathType: Prefix
+            backend:
+              service:
+                name: todobackend-svc
+                port:
+                  number: 80
+
+          # ✅ Image (backend)
           - path: /image
             pathType: Prefix
             backend:
@@ -13,6 +24,8 @@ spec:
                 name: todobackend-svc
                 port:
                   number: 80
+
+          # ✅ Frontend UI
           - path: /
             pathType: Prefix
             backend:
@@ -20,5 +33,3 @@ spec:
                 name: todofrontend-svc
                 port:
                   number: 80
-
-          

@@ -18,7 +18,8 @@ spec:
             claimName: todo-claim
       containers:
         - name: todobackend
-          image: rakhicc/todobackend:v1
+          image: rakhicc/todobackend:v11
+          imagePullPolicy: Always
           volumeMounts:
           - name: shared-todocache
             mountPath: /data
