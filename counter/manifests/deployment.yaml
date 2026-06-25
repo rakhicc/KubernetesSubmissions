@@ -15,7 +15,10 @@ spec:
     spec:
       containers:
         - name: ping-pong
-          image: rakhicc/ping-pong:v3
+          image: rakhicc/ping-pong:v4
+          imagePullPolicy: Always
           env:
             - name: PORT
               value: "3007"
+            - name: DATABASE_URL
+              value: "postgres://pinguser:securepassword@postgres-db-0.postgres-db-service:5432/pingpong_db"    
