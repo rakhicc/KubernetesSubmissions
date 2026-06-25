@@ -20,7 +20,7 @@ spec:
 
       containers:
         - name: todobackend
-          image: rakhicc/todobackend:v12
+          image: rakhicc/todobackend:v13
           imagePullPolicy: Always
 
           volumeMounts:
@@ -30,3 +30,34 @@ spec:
           envFrom:
             - configMapRef:
                 name: todo-backend-config
+
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-backend-config
+                  key: DB_HOST
+
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-backend-config
+                  key: DB_PORT
+
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-backend-config
+                  key: DB_NAME
+
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: user
+
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password

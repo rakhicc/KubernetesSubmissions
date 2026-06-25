@@ -11,15 +11,36 @@ const PORT = process.env.PORT;
 const IMAGE_URL = process.env.IMAGE_URL;
 const DATA_DIR = process.env.DATA_DIR;
 const TEN_MIN = parseInt(process.env.IMAGE_CACHE_TIME, 10);
+const { Pool } = require('pg');
 
+const pool = new Pool({
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+});
+console.log('pool value from env ',pool);
 console.log('port value from env ',PORT);
 console.log('IMAGE_URL value from env ',IMAGE_URL);
+console.log('DB_HOST value from env ',process.env.DB_HOST);
+console.log('DB_PORT value from env ',process.env.DB_PORT);
+console.log('DB_NAME value from env ',process.env.DB_NAME);
 // Enable CORS explicitly before defining any routes
 app.use(cors());
 
 // Construct robust absolute paths using path.join and __dirname
 const imagePath = path.join(__dirname, DATA_DIR, 'image.jpg');
 const metaPath = path.join(__dirname, DATA_DIR, 'meta.json');
+const initDB = async () => { await pool.query(`
+    CREATE TABLE IF NOT EXISTS todos (
+      id SERIAL PRIMARY KEY,
+      text TEXT NOT NULL
+    );
+  `);
+};
+
+initDB();
 
 
 function fetchImage(url = IMAGE_URL) {
@@ -82,26 +103,27 @@ app.get('/image', async (req, res) => {
 
 app.use(express.json());
 
-let todos = [
-  'Learn Kubernetes basics',
-  'Deploy application to cluster'
-];
-
 // ✅ GET todos
-app.get('/todos', (req, res) => {
-  console.log("Fetching todos:", todos);
-  res.json(todos);
+app.get('/todos', async (req, res) => {
+const result = await pool.query('SELECT * FROM todos');
+  res.json(result.rows);
+
 });
 
 // ✅ POST new todo
-app.post('/todos', (req, res) => {
+app.post('/todos', async (req, res) => {
   const todo = req.body.todo;
 
   if (!todo || todo.length > 140) {
     return res.status(400).json({ error: 'Invalid todo' });
   }
 
-  todos.push(todo);
+const result = await pool.query(
+    'INSERT INTO todos (text) VALUES ($1) RETURNING *',
+    [todo]
+  );
+  console.log("Inserted todo into database and results is:", result);
+console.log("Inserted todo into database:", result.rows[0]);
   res.status(201).json(todo);
 });
 

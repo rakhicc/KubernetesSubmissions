@@ -19,7 +19,8 @@ spec:
             claimName: todo-claim
       containers:
         - name: todofrontend
-          image: rakhicc/todofrontend:v7
+          image: rakhicc/todofrontend:v10
+          imagePullPolicy: Always
 
           envFrom:
             - configMapRef:

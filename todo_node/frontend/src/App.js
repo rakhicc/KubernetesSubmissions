@@ -91,11 +91,13 @@ useEffect(() => {
       <h2>Todos</h2>
 
       <div className="todo-list">
-        {todos.map((item, index) => (
-          <div key={index} className="todo-item">
-            {item}
-          </div>
-        ))}
+
+{todos.map((item) => (
+    <div key={item.id} className="todo-item">
+      {item.text}
+    </div>
+  ))}
+
       </div>
 
       {/* ✅ Footer */}
