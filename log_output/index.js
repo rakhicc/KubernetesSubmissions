@@ -5,6 +5,7 @@ const PORT = process.env.PORT || 3008;
 const randomString = Math.random().toString(36).substring(2);
 const fs = require('fs');
 const fileContentPath = '/etc/config/information.txt';
+
 // ✅ Call ping-pong service
 const getPingCount = () => {
     console.log("Fetching ping count from ping-pong service...");
@@ -20,7 +21,14 @@ const getPingCount = () => {
 };
 
 const server = http.createServer(async (req, res) => {
+  // 2. FIXED: Added native GKE Ingress Root / Health Check Handler
   if (req.url === '/') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('OK');
+    return;
+  }
+
+  if (req.url === '/logoutput') {
     const timestamp = new Date().toISOString();
 
     const pingCount = await getPingCount();

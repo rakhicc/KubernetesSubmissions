@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: ping-pong
-          image: rakhicc/ping-pong:v5
+          image: rakhicc/ping-pong:v6
           imagePullPolicy: Always
           env:
             - name: PORT

@@ -3,6 +3,11 @@ const express = require('express');
 const app = express();
 
 const port = process.env.PORT || 3007;
+// Add this near your existing routes before your server listener
+app.get('/', (req, res) => {
+  console.log("Received request at /");
+    res.status(200).send('OK');
+});
 
 // Database Connection configuration using Environment Variables
 const pool = new Pool({
