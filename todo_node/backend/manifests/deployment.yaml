@@ -20,7 +20,7 @@ spec:
 
       containers:
         - name: todobackend
-          image: rakhicc/todobackend:v13
+          image: rakhicc/todobackend:v14
           imagePullPolicy: Always
 
           volumeMounts:

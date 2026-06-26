@@ -113,8 +113,10 @@ const result = await pool.query('SELECT * FROM todos');
 // ✅ POST new todo
 app.post('/todos', async (req, res) => {
   const todo = req.body.todo;
+  console.log("Received new todo:", todo);
 
   if (!todo || todo.length > 140) {
+     console.log("todo length exceeded 140 characters");
     return res.status(400).json({ error: 'Invalid todo' });
   }
 
