@@ -14,3 +14,5 @@ http://localhost:8081/status
 mountpath is /data which is shared between the counter app and log_output app.
 accessing the resource http://localhost:8081/ shows result which includes timestamp, random string and the counter value.
 
+Note that Ingress expects a service to give a successful response in the path / even if the service is mapped to some other path!
+
