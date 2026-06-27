@@ -5,33 +5,48 @@ metadata:
   namespace: exercises
 spec:
   parentRefs:
-  - name: my-gateway
+    - name: my-gateway
+
   rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /
-    backendRefs:
-    - name: log-output-svc
-      port: 80
-  - matches:    
-    - path:
-        type: PathPrefix
-        value: /logoutput
-    backendRefs:
-    - name: log-output-svc
-      port: 80
-  - matches:    
-    - path:
-        type: PathPrefix
-        value: /pingpong
-    backendRefs:
-    - name: ping-pong-svc
-      port: 80
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /pings
-    backendRefs:
-    - name: ping-pong-svc
-      port: 80      
+
+    # ✅ Root + general traffic → log-output
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: log-output-svc
+          port: 80
+
+    # ✅ Explicit /logoutput (optional but fine for clarity)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /logoutput
+      backendRefs:
+        - name: log-output-svc
+          port: 80
+
+    # ✅ /pingpong → ping-pong-svc WITH rewrite to "/"
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /pingpong
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+      backendRefs:
+        - name: ping-pong-svc
+          port: 80
+
+    # ✅ /pings → ping-pong-svc (no rewrite)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /pings
+      backendRefs:
+        - name: ping-pong-svc
+          port: 80
