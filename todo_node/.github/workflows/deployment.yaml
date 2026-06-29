@@ -1,0 +1,103 @@
+name: Release application
+
+on:
+  push:
+    # Triggers pipeline only when changes are made inside the todo_node directory
+    paths:
+      - 'todo_node/**'
+
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GKE_CLUSTER: dwk-cluster
+  GKE_ZONE: europe-north1-b
+  REGISTRY: europe-north1-docker.pkg.dev
+  REPOSITORY: my-repository
+  # Kustomize original placeholder image names (Must match manifests/kustomization.yaml)
+  FRONTEND_IMAGE_NAME: rakhicc/todo-frontend:gke-v2
+  BACKEND_IMAGE_NAME: rakhicc/todo-backend:gke-v3
+  
+  # Actual Kubernetes deployments names to check rollout status
+  FRONTEND_DEPLOYMENT: todofrontenddep
+  BACKEND_DEPLOYMENT: todobackend
+  BRANCH: ${{ github.ref_name }}
+
+jobs:
+  build-publish-deploy:
+    name: Build, Publish and Deploy
+    runs-on: ubuntu-latest
+    environment: GKE_PROJECT
+
+    steps:
+      # ✅ Checkout
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ✅ Authenticate to GCP
+      - name: Auth to GCP
+        uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+
+      # ✅ Setup gcloud
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v3
+
+      # ✅ Verify gcloud
+      - name: Use gcloud CLI
+        run: gcloud info
+
+      # ✅ Configure Docker for Artifact Registry
+      - name: Configure Docker
+        run: gcloud --quiet auth configure-docker $REGISTRY
+
+      # ✅ Get GKE credentials
+      - name: Get GKE credentials
+        uses: google-github-actions/get-gke-credentials@v3
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          project_id: ${{ env.PROJECT_ID }}
+          location: ${{ env.GKE_ZONE }}
+
+      # ✅ Form Unique Tags for both Frontend and Backend
+      - name: Form the image names
+        run: |
+          echo "FRONTEND_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/todo-frontend:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+          echo "BACKEND_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/todo-backend:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+
+      # ✅ Build Frontend (React) - Executed inside todo_node/frontend
+      - name: Build Frontend Image
+        run: docker build --tag $FRONTEND_TAG ./todo_node/frontend
+
+      # ✅ Build Backend (Node.js) - Executed inside todo_node/backend
+      - name: Build Backend Image
+        run: docker build --tag $BACKEND_TAG ./todo_node/backend
+
+      # ✅ Push Frontend Image to Artifact Registry
+      - name: Publish Frontend
+        run: docker push $FRONTEND_TAG
+# ✅ Push Backend Image to Artifact Registry
+      - name: Publish Backend
+        run: docker push $BACKEND_TAG
+
+      # ✅ Install Kustomize
+      - name: Set up Kustomize
+        uses: imranismail/setup-kustomize@v3
+
+      # ✅ Update Kustomize Manifests and Deploy both layers to GKE
+      - name: Deploy
+        run: |
+          cd todo_node/manifests
+          kustomize edit set image $FRONTEND_IMAGE_NAME=$FRONTEND_TAG
+          kustomize edit set image $BACKEND_IMAGE_NAME=$BACKEND_TAG
+          kustomize build . | kubectl apply -f -
+          
+          # Check rollout statuses for both deployments
+          kubectl rollout status deployment/$FRONTEND_DEPLOYMENT
+          kubectl rollout status deployment/$BACKEND_DEPLOYMENT
+          kubectl get services -o wide
