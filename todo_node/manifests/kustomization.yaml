@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# 1. Declare all your existing manifest files exactly as they are named
+resources:
+  - backend-configMap.yaml
+  - postgres-secret.yaml
+  - postgres.yaml
+  - backend-deployment.yaml
+  - cronjob.yaml
+  - frontend-configmap.yaml
+  - frontend-deployment.yaml
+  - backend-service.yaml
+  - frontend-service.yaml
+  - ingress.yaml
+  - namespace.yaml
+  
+
+# 2. Automatically inject your multi-platform Docker Hub images on the fly
+images:
+  - name: todo-backend-placeholder-image        # 👈 Replace with the exact 'image' string currently in your backend-deployment.yaml
+    newName: rakhicc/todo-backend
+    newTag: gke-v1
+  - name: todo-frontend-placeholder-image       # 👈 Replace with the exact 'image' string currently in your frontend-deployment.yaml
+    newName: rakhicc/todo-frontend
+    newTag: gke-v1

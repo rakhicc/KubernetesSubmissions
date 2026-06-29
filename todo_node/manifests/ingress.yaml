@@ -17,14 +17,6 @@ spec:
                 port:
                   number: 80
 
-          # ✅ Image (backend)
-          - path: /image
-            pathType: Prefix
-            backend:
-              service:
-                name: todobackend-svc
-                port:
-                  number: 80
 
           # ✅ Frontend UI
           - path: /

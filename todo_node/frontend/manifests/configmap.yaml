@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: todofrontend-config
-  namespace: project
-data:
-  REACT_APP_API_BASE_URL: "/"
-  REACT_APP_IMAGE_PATH: "/image"
-  REACT_APP_TODOS_PATH: "/todos"

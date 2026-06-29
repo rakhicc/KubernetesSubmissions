@@ -13,20 +13,12 @@ spec:
       labels:
         app: todofrontend
     spec:
-      volumes:
-        - name: shared-todocache
-          persistentVolumeClaim:
-            claimName: todo-claim
       containers:
         - name: todofrontend
-          image: rakhicc/todofrontend:v10
+          image: rakhicc/todo-frontend:gke-v2
           imagePullPolicy: Always
 
           envFrom:
             - configMapRef:
                 name: todofrontend-config
-
-          volumeMounts:
-          - name: shared-todocache
-            mountPath: /data
           

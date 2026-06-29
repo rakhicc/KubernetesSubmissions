@@ -4,7 +4,10 @@ import "./App.css";
 function App() {
   const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
 const TODOS_PATH = process.env.REACT_APP_TODOS_PATH || "/todos";
-const IMAGE_PATH = process.env.REACT_APP_IMAGE_PATH || "/image";
+
+ // ✅ Directly inject the external image source URL via environment variable
+  const IMAGE_SOURCE_URL = process.env.REACT_APP_IMAGE_URL|| "https://picsum.photos/1200"; ;
+  const TEN_MINUTES = parseInt(process.env.REACT_APP_IMAGE_CACHE_TIME, 10) || (10 * 60 * 1000);
   const [imageUrl, setImageUrl] = useState("");
   const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState([]);
@@ -23,16 +26,39 @@ useEffect(() => {
 }, []);
 
 
-  useEffect(() => {
+  /* useEffect(() => {
     loadImage();
 
     const interval = setInterval(loadImage, 10 * 60 * 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, []); */
+  // ✅ New Frontend-only Caching Logic
+  useEffect(() => {
+    const handleImageCache = () => {
+      const cachedTime = localStorage.getItem("image_created_at");
+      const cachedUrl = localStorage.getItem("cached_image_url");
+      const now = Date.now();
 
-  const loadImage = () => {
+      if (cachedTime && cachedUrl && (now - parseInt(cachedTime, 10) < TEN_MINUTES)) {
+        // Use the browser cached image URL
+        setImageUrl(cachedUrl);
+      } else {
+        // Cache expired or missing: Generate a fresh URL with a timestamp buster
+        const freshUrl = `${IMAGE_SOURCE_URL}?t=${now}`;
+        localStorage.setItem("cached_image_url", freshUrl);
+        localStorage.setItem("image_created_at", now.toString());
+        setImageUrl(freshUrl);
+      }
+    };
+
+    handleImageCache();
+    const interval = setInterval(handleImageCache, TEN_MINUTES);
+    return () => clearInterval(interval);
+  }, [IMAGE_SOURCE_URL]);
+
+  /* const loadImage = () => {
     setImageUrl(`${API_BASE}${IMAGE_PATH}?t=${Date.now()}`);
-  };
+  }; */
 
 
 
