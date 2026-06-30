@@ -12,7 +12,7 @@ permissions:
   id-token: write
 
 env:
-  PROJECT_ID: dwk-gke-500607
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: dwk-cluster
   GKE_ZONE: europe-north1-b
   REGISTRY: europe-north1-docker.pkg.dev
@@ -43,7 +43,7 @@ jobs:
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.SERVICE_ACCOUNT }}
-          project_id: dwk-gke-500607
+          project_id: ${{ secrets.GKE_PROJECT }}
 
       # ✅ Setup gcloud
       - name: Set up Cloud SDK
@@ -98,11 +98,22 @@ jobs:
       - name: Deploy
         run: |
           cd todo_node/manifests
+          # Determine namespace
+          if [ "$BRANCH" = "main" ]; then      
+                    NAMESPACE=project
+          else      NAMESPACE=$BRANCH
+          fi
+          # Create namespace if it doesn't exist   
+          kubectl create namespace $NAMESPACE || true
+          # Set namespace for kubectl commands    
+          kubectl config set-context --current --namespace=$NAMESPACE
+          # Update kustomize namespace   
+          kustomize edit set namespace $NAMESPACE
           kustomize edit set image $FRONTEND_IMAGE_NAME=$FRONTEND_TAG
           kustomize edit set image $BACKEND_IMAGE_NAME=$BACKEND_TAG
           kustomize build . | kubectl apply -f -
           
           # Check rollout statuses for both deployments
-          kubectl rollout status deployment/$FRONTEND_DEPLOYMENT -n project
-          kubectl rollout status deployment/$BACKEND_DEPLOYMENT -n project
+          kubectl rollout status deployment/$FRONTEND_DEPLOYMENT -n $NAMESPACE
+          kubectl rollout status deployment/$BACKEND_DEPLOYMENT -n $NAMESPACE
           kubectl get services -o wide
