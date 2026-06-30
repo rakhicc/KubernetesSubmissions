@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: todofrontend
-          image: rakhicc/todo-frontend:gke-v2
+          image: todo-frontend-placeholder-image
           imagePullPolicy: Always
 
           envFrom:

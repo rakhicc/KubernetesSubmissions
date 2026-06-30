@@ -18,8 +18,8 @@ env:
   REGISTRY: europe-north1-docker.pkg.dev
   REPOSITORY: my-repository
   # Kustomize original placeholder image names (Must match manifests/kustomization.yaml)
-  FRONTEND_IMAGE_NAME: rakhicc/todo-frontend:gke-v2
-  BACKEND_IMAGE_NAME: rakhicc/todo-backend:gke-v3
+  FRONTEND_IMAGE_NAME: todo-frontend-placeholder-image
+  BACKEND_IMAGE_NAME: todo-backend-placeholder-image
   
   # Actual Kubernetes deployments names to check rollout status
   FRONTEND_DEPLOYMENT: todofrontend

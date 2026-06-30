@@ -4,7 +4,7 @@ import "./App.css";
 function App() {
   const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
 const TODOS_PATH = process.env.REACT_APP_TODOS_PATH || "/todos";
-
+console.log("checking workflow:");
  // ✅ Directly inject the external image source URL via environment variable
   const IMAGE_SOURCE_URL = process.env.REACT_APP_IMAGE_URL|| "https://picsum.photos/1200"; ;
   const TEN_MINUTES = parseInt(process.env.REACT_APP_IMAGE_CACHE_TIME, 10) || (10 * 60 * 1000);

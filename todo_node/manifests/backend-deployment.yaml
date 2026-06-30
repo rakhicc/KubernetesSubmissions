@@ -16,7 +16,7 @@ spec:
 
       containers:
         - name: todobackend
-          image: rakhicc/todo-backend:gke-v3
+          image: todo-backend-placeholder-image
           imagePullPolicy: Always
 
           envFrom:
