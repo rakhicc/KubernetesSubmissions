@@ -43,6 +43,7 @@ Moderate. A Cloud SQL instance starts generating costs immediately after creatio
 - Automated backups
 - High availability configuration
 - Network traffic
+
 Although setup is simple, there is a financial cost even for small workloads.
 
 ### Maintenance
