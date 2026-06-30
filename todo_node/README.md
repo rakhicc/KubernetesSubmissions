@@ -37,6 +37,14 @@ Cloud SQL is a fully managed PostgreSQL service provided by Google Cloud. Google
 
 Low. A Cloud SQL instance can be created through the Google Cloud Console in a few minutes.
 
+### Cost to Initialize
+Moderate. A Cloud SQL instance starts generating costs immediately after creation. Additional costs may be incurred for:
+- Storage
+- Automated backups
+- High availability configuration
+- Network traffic
+Although setup is simple, there is a financial cost even for small workloads.
+
 ### Maintenance
 
 Low. Google manages upgrades, backups, failover, storage, and most operational tasks.
@@ -76,6 +84,9 @@ In this approach PostgreSQL runs inside the Kubernetes cluster using a StatefulS
 ### Initialization Effort
 
 Medium to high. StatefulSets, Services, Secrets, PVCs, and storage configuration must be created and maintained.
+
+### Cost to Initialize
+Low to moderate. If a GKE cluster already exists, the main additional cost is the Persistent Disk used by the database. Initial infrastructure costs are usually lower than Cloud SQL.80 81However, engineering time spent configuring and operating PostgreSQL should also be considered as part of the overall cost.
 
 ### Maintenance
 
