@@ -86,7 +86,7 @@ In this approach PostgreSQL runs inside the Kubernetes cluster using a StatefulS
 Medium to high. StatefulSets, Services, Secrets, PVCs, and storage configuration must be created and maintained.
 
 ### Cost to Initialize
-Low to moderate. If a GKE cluster already exists, the main additional cost is the Persistent Disk used by the database. Initial infrastructure costs are usually lower than Cloud SQL.80 81However, engineering time spent configuring and operating PostgreSQL should also be considered as part of the overall cost.
+Low to moderate. If a GKE cluster already exists, the main additional cost is the Persistent Disk used by the database. Initial infrastructure costs are usually lower than Cloud SQL.However, engineering time spent configuring and operating PostgreSQL should also be considered as part of the overall cost.
 
 ### Maintenance
 
