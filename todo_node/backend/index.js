@@ -67,6 +67,7 @@ console.log("Inserted todo into database:", result.rows[0]);
 app.listen(PORT, () => {
   console.log('New logic initialized');
   console.log('workflow initialized');
+  console.log('workflow test');
   console.log('image resource removed');
   console.log(`Backend running on ${PORT}`);
 });
