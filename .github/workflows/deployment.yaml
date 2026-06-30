@@ -103,6 +103,6 @@ jobs:
           kustomize build . | kubectl apply -f -
           
           # Check rollout statuses for both deployments
-          kubectl rollout status deployment/$FRONTEND_DEPLOYMENT
-          kubectl rollout status deployment/$BACKEND_DEPLOYMENT
+          kubectl rollout status deployment/$FRONTEND_DEPLOYMENT -n project
+          kubectl rollout status deployment/$BACKEND_DEPLOYMENT -n project
           kubectl get services -o wide
