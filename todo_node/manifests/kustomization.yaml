@@ -13,6 +13,7 @@ resources:
   - backend-service.yaml
   - frontend-service.yaml
   - ingress.yaml
+  - backup-cronjob.yaml
   
 
 # 2. Automatically inject your multi-platform Docker Hub images on the fly
