@@ -22,7 +22,7 @@ env:
   BACKEND_IMAGE_NAME: rakhicc/todo-backend:gke-v3
   
   # Actual Kubernetes deployments names to check rollout status
-  FRONTEND_DEPLOYMENT: todofrontenddep
+  FRONTEND_DEPLOYMENT: todofrontend
   BACKEND_DEPLOYMENT: todobackend
   BRANCH: ${{ github.ref_name }}
 
