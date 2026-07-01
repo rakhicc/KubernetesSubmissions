@@ -115,3 +115,8 @@ Restore procedures must also be designed and tested by the development team.
 ## Conclusion
 For a production environment, I would choose Google Cloud SQL because it significantly reduces operational overhead, provides managed backups, automated maintenance, and built-in recovery capabilities. It allows developers to focus on building and operating the application rather than managing the database infrastructure. 
 For learning purposes and small projects, running PostgreSQL inside GKE using StatefulSets and PersistentVolumeClaims provides more control and helps in understanding Kubernetes storage concepts and database operations.
+
+## Exercise 3.12 - GKE Monitoring and Logs
+
+The screenshot below shows the application logs in Google Cloud Logging after creating a new todo item.
+![alt text](image.png)
