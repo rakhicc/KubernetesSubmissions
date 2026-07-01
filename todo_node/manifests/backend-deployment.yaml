@@ -18,6 +18,14 @@ spec:
           image: todo-backend-placeholder-image
           imagePullPolicy: Always
 
+          resources:
+            requests:
+              cpu: "25m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi" 
+
           envFrom:
             - configMapRef:
                 name: todo-backend-config
