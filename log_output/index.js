@@ -20,6 +20,7 @@ const getPingCount = () => {
   });
 };
 
+
 const server = http.createServer(async (req, res) => {
   // 2. FIXED: Added native GKE Ingress Root / Health Check Handler
   if (req.url === '/') {
@@ -27,7 +28,19 @@ const server = http.createServer(async (req, res) => {
     res.end('OK');
     return;
   }
-
+if (req.url === '/health') {
+     try {const pingCount = await getPingCount();
+           // If ping-pong is reachable, we're ready8     
+            if (pingCount !== '0') {
+                  res.writeHead(200);       
+                  res.end('Ready');    } else {
+                          res.writeHead(503);       
+                          res.end('Not Ready');     }   
+                        } catch (err) {  
+                                res.writeHead(503);    
+                                 res.end('Not Ready');    }    
+                                 return;  
+                                }
   if (req.url === '/logoutput') {
     const timestamp = new Date().toISOString();
 

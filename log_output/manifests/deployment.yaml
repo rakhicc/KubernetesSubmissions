@@ -15,7 +15,13 @@ spec:
     spec:
       containers:
         - name: log-output
-          image: rakhicc/log-output-node:v10
+          image: rakhicc/log-output-node:v11
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3008
+            initialDelaySeconds: 5
+            periodSeconds: 5
           imagePullPolicy: Always
           env:
             - name: PORT

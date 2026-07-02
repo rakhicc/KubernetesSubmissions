@@ -15,10 +15,16 @@ spec:
     spec:
       containers:
         - name: ping-pong
-          image: rakhicc/ping-pong:v10
+          image: rakhicc/ping-pong:v11
           imagePullPolicy: Always
           env:
             - name: PORT
               value: "3007"
             - name: DATABASE_URL
-              value: "postgres://pinguser:securepassword@postgres-db-0.postgres-db-service:5432/pingpong_db"    
+              value: "postgres://pinguser:securepassword@postgres-db-0.postgres-db-service:5432/pingpong_db" 
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3007
+            initialDelaySeconds: 5
+            periodSeconds: 5       
