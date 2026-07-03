@@ -170,7 +170,7 @@ const handleBreak = async () => {
         Done
       </span>
     ) : (
-      <button
+      <button className="mark-done-btn"
         onClick={() => markDone(item.id)}
       >
         Mark done
