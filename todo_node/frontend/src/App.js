@@ -30,10 +30,9 @@ useEffect(() => {
  useEffect(() => {
   const interval = setInterval(async () => {
     try {
-      const response = await fetch('/healthz');
-
-      setHealthy(response.ok);
-
+      const response = await fetch('/status');
+      const data = await response.json();
+      setHealthy(data.healthy);
     } catch (err) {
       setHealthy(false);
     }
@@ -94,7 +93,15 @@ useEffect(() => {
   setTodos(data);
 };
 
-
+const handleBreak = async () => {
+  await fetch('/break', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  });
+  setHealthy(false);
+}
   return (
     <div className="app-container">
       <h1>The project App</h1>
@@ -134,8 +141,7 @@ useEffect(() => {
   ))}
 
       </div>
-<button  onClick={async () => {
-     await fetch('/break', {      method: 'POST'   });  }} > break the app</button>
+<button  onClick={handleBreak} > break the app</button>
      {!healthy && (
         <div className="failure-box">   <h1>System Failure</h1>   <p>     The Todo App is currently unhealthy.     Please wait for recovery.   </p>  </div>)}
       {/* ✅ Footer */}

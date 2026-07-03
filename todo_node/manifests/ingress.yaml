@@ -15,6 +15,13 @@ spec:
                 name: todobackend-svc
                 port:
                   number: 80
+          - path: /status
+            pathType: Prefix
+            backend:
+              service:
+                name: todobackend-svc
+                port:
+                  number: 80        
 
 
           # ✅ Frontend UI

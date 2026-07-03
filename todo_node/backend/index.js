@@ -92,6 +92,9 @@ app.post('/break', (req, res) =>
      res.json(
       {  message: 'Application broken' });
     });
+
+    app.get('/status', (req, res) => {
+       res.json({   healthy: isHealthy  });});
 app.listen(PORT, () => {
   console.log('New logic initialized');
   console.log('workflow initialized');
