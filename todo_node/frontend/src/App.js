@@ -68,7 +68,16 @@ useEffect(() => {
     setImageUrl(`${API_BASE}${IMAGE_PATH}?t=${Date.now()}`);
   }; */
 
+ const markDone = async (id) => {
+  await fetch(`${API_BASE}${TODOS_PATH}/${id}`, {
+    method: 'PUT'
+  });
 
+  const res = await fetch(`${API_BASE}${TODOS_PATH}`);
+  const data = await res.json();
+
+  setTodos(data);
+};
 
   const handleChange = (e) => {
     if (e.target.value.length <= 140) {
