@@ -120,3 +120,13 @@ For learning purposes and small projects, running PostgreSQL inside GKE using St
 
 The screenshot below shows the application logs in Google Cloud Logging after creating a new todo item.
 ![alt text](image.png)
+
+## Exercise 4.3 - Prometheus
+
+Write a query that shows the number of pods created by StatefulSets in prometheus namespace. :
+count(
+  kube_pod_info{
+    namespace="monitoring",
+    created_by_kind="StatefulSet"
+  }
+)
