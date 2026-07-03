@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
+const { connectNats } = require('./nats');
+const { publishEvent } = require('./nats');
+
 
 // ✅ NO hardcoded values
 const PORT = process.env.PORT;
@@ -65,7 +68,9 @@ app.put('/todos/:id', async (req, res) => {
       `,
       [id]
     );
-
+await publishEvent({type: 'done',  
+    id, 
+    text: result.rows[0].text });
     res.json(result.rows[0]);
 
   } catch (err) {
@@ -88,6 +93,9 @@ const result = await pool.query(
     'INSERT INTO todos (text) VALUES ($1) RETURNING *',
     [todo]
   );
+  await publishEvent({
+       type: 'created',    text: todo  });
+
   console.log("Inserted todo into database and results is:", result);
 console.log("Inserted todo into database:", result.rows[0]);
   res.status(201).json(todo);
@@ -124,10 +132,13 @@ app.post('/break', (req, res) =>
 
     app.get('/status', (req, res) => {
        res.json({   healthy: isHealthy  });});
+       (async () => {
 app.listen(PORT, () => {
+  await connectNats();
   console.log('New logic initialized');
   console.log('workflow initialized');
   console.log('workflow testing progress image names set correctly');
   console.log('image resource removed');
   console.log(`Backend running on ${PORT}`);
+    });
 });

@@ -14,6 +14,7 @@ resources:
   - frontend-service.yaml
   - ingress.yaml
   - backup-cronjob.yaml
+  - broadcaster-deployment.yaml
   
 
 # 2. Automatically inject your multi-platform Docker Hub images on the fly
