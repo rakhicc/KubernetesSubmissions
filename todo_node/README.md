@@ -124,6 +124,7 @@ The screenshot below shows the application logs in Google Cloud Logging after cr
 ## Exercise 4.3 - Prometheus
 
 Write a query that shows the number of pods created by StatefulSets in prometheus namespace. :
+
 count(
   kube_pod_info{
     namespace="monitoring",
