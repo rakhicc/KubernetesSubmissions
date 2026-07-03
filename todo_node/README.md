@@ -126,8 +126,6 @@ The screenshot below shows the application logs in Google Cloud Logging after cr
 Write a query that shows the number of pods created by StatefulSets in prometheus namespace. :
 
 count(
-  kube_pod_owner{
-    namespace="monitoring",
-    owner_kind="StatefulSet"
-  }
+  kube_pod_info{namespace="prometheus", owner_kind="StatefulSet"}
 )
+
