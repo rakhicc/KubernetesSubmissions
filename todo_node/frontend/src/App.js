@@ -134,11 +134,42 @@ const handleBreak = async () => {
 
       <div className="todo-list">
 
-{todos.map((item) => (
+{/* {todos.map((item) => (
     <div key={item.id} className="todo-item">
       {item.text}
     </div>
-  ))}
+  ))} */}
+  {todos.map((item) => (
+  <div key={item.id} className="todo-item">
+
+    <span
+      style={{
+        textDecoration: item.done ? 'line-through' : 'none',
+        color: item.done ? '#777' : '#000'
+      }}
+    >
+      {item.text}
+    </span>
+
+    {item.done ? (
+      <span
+        style={{
+          color: 'green',
+          fontWeight: 'bold'
+        }}
+      >
+        Done
+      </span>
+    ) : (
+      <button
+        onClick={() => markDone(item.id)}
+      >
+        Mark done
+      </button>
+    )}
+
+  </div>
+))}
 
       </div>
 <button  onClick={handleBreak} > break the app</button>

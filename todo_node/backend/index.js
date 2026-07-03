@@ -19,16 +19,23 @@ const pool = new Pool({
 app.use(cors());
 
 
-const initDB = async () => { await pool.query(`
+const initDB = async () => {
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS todos (
       id SERIAL PRIMARY KEY,
-      text TEXT NOT NULL
+      text TEXT NOT NULL,
+      done BOOLEAN DEFAULT FALSE
     );
+  `);
+
+  // For existing databases where the column doesn't exist yet
+  await pool.query(`
+    ALTER TABLE todos
+    ADD COLUMN IF NOT EXISTS done BOOLEAN DEFAULT FALSE;
   `);
 };
 
 initDB();
-
 
 
 
@@ -45,6 +52,28 @@ const result = await pool.query('SELECT * FROM todos');
 
 });
 
+app.put('/todos/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query(
+      `
+      UPDATE todos
+      SET done = TRUE
+      WHERE id = $1
+      RETURNING *
+      `,
+      [id]
+    );
+
+    res.json(result.rows[0]);
+
+  } catch (err) {
+    res.status(500).json({
+      error: err.message
+    });
+  }
+});
 // ✅ POST new todo
 app.post('/todos', async (req, res) => {
   const todo = req.body.todo;
