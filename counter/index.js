@@ -10,14 +10,7 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
-app.get('/health', async (req, res) => {
-  try {
-    await pool.query('SELECT 1');
-    res.sendStatus(200);
-  } catch (err) {
-    res.sendStatus(503);
-  }
-});
+
   app.get('/', async (req, res) => {
   try {
     console.log("Incrementing ping count in database...");
