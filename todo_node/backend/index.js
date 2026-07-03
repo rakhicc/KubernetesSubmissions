@@ -6,7 +6,7 @@ const app = express();
 // ✅ NO hardcoded values
 const PORT = process.env.PORT;
 const { Pool } = require('pg');
-
+let isHealthy = true;
 const pool = new Pool({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
@@ -64,6 +64,34 @@ console.log("Inserted todo into database:", result.rows[0]);
   res.status(201).json(todo);
 });
 
+app.get('/healthz', async (req, res) => {
+  console.log("Health check endpoint called");
+  try {
+    
+    await pool.query('SELECT 1');
+
+    if (!isHealthy) {
+      return res.status(500).json({
+        status: 'unhealthy'
+      });
+    }
+
+    return res.status(200).json({
+      status: 'ok'
+    });
+
+  } catch (err) {
+    return res.status(503).json({
+      status: 'database unavailable'
+    });
+  }
+});
+
+app.post('/break', (req, res) => 
+  {  isHealthy = false;
+     res.json(
+      {  message: 'Application broken' });
+    });
 app.listen(PORT, () => {
   console.log('New logic initialized');
   console.log('workflow initialized');

@@ -4,6 +4,7 @@ import "./App.css";
 function App() {
   const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
 const TODOS_PATH = process.env.REACT_APP_TODOS_PATH || "/todos";
+const [healthy, setHealthy] = useState(true);
 console.log("checking workflow:");
  // ✅ Directly inject the external image source URL via environment variable
   const IMAGE_SOURCE_URL = process.env.REACT_APP_IMAGE_URL|| "https://picsum.photos/1200"; ;
@@ -26,19 +27,27 @@ useEffect(() => {
 }, []);
 
 
-  /* useEffect(() => {
-    loadImage();
+ useEffect(() => {
+  const interval = setInterval(async () => {
+    try {
+      const response = await fetch('/healthz');
 
-    const interval = setInterval(loadImage, 10 * 60 * 1000);
-    return () => clearInterval(interval);
-  }, []); */
-  // ✅ New Frontend-only Caching Logic
+      setHealthy(response.ok);
+
+    } catch (err) {
+      setHealthy(false);
+    }
+  }, 3000);
+
+  return () => clearInterval(interval);
+}, []);
+
   useEffect(() => {
     const handleImageCache = () => {
       const cachedTime = localStorage.getItem("image_created_at");
       const cachedUrl = localStorage.getItem("cached_image_url");
       const now = Date.now();
-
+     
       if (cachedTime && cachedUrl && (now - parseInt(cachedTime, 10) < TEN_MINUTES)) {
         // Use the browser cached image URL
         setImageUrl(cachedUrl);
@@ -125,7 +134,10 @@ useEffect(() => {
   ))}
 
       </div>
-
+<button  onClick={async () => {
+     await fetch('/break', {      method: 'POST'   });  }} > break the app</button>
+     {!healthy && (
+        <div className="failure-box">   <h1>System Failure</h1>   <p>     The Todo App is currently unhealthy.     Please wait for recovery.   </p>  </div>)}
       {/* ✅ Footer */}
       <p className="footer">DevOps with Kubernetes 2025</p>
     </div>

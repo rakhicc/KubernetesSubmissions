@@ -17,6 +17,19 @@ spec:
         - name: todobackend
           image: todo-backend-placeholder-image
           imagePullPolicy: Always
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 3  
 
           resources:
             requests:
