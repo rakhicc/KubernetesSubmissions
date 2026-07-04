@@ -38,7 +38,7 @@ const initDB = async () => {
   `);
 };
 
-initDB();
+
 
 
 
@@ -132,13 +132,20 @@ app.post('/break', (req, res) =>
 
     app.get('/status', (req, res) => {
        res.json({   healthy: isHealthy  });});
-       (async () => {
-app.listen(PORT, async () => {
-  await connectNats();
-  console.log('New logic initialized');
-  console.log('workflow initialized');
-  console.log('workflow testing progress image names set correctly');
-  console.log('image resource removed');
-  console.log(`Backend running on ${PORT}`);
+
+        async function start() {
+  try {
+    await connectNats();
+    await initDB();
+
+    app.listen(PORT, () => {
+      console.log(`Backend running on ${PORT}`);
     });
-});
+
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
+}
+
+start();
