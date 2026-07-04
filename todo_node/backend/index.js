@@ -133,7 +133,7 @@ app.post('/break', (req, res) =>
     app.get('/status', (req, res) => {
        res.json({   healthy: isHealthy  });});
        (async () => {
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   await connectNats();
   console.log('New logic initialized');
   console.log('workflow initialized');
