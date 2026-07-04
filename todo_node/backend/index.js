@@ -135,7 +135,11 @@ app.post('/break', (req, res) =>
 
         async function start() {
   try {
-    await connectNats();
+    try {
+         await connectNats();
+              console.log('NATS connected');  } 
+              catch (err) {
+                    console.error('NATS connection failed:', err);    }
     await initDB();
 
     app.listen(PORT, () => {

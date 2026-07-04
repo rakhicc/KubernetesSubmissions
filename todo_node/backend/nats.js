@@ -7,7 +7,7 @@ const sc = StringCodec();
 
 const connectNats = async () => {
   nc = await connect({
-    servers: process.env.NATS_URL || 'nats://my-nats.default.svc.cluster.local:4222'
+    servers: process.env.NATS_URL || 'nats://my-nats.nats.svc.cluster.local:4222'
   });
 
   console.log('Connected to NATS');
