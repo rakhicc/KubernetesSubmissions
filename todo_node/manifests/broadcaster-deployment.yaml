@@ -20,7 +20,7 @@ spec:
       containers:
         - name: broadcaster
 
-          image: rakhicc/broadcaster:v1
+          image: broadcaster-placeholder-image
 
           env:
             - name: NATS_URL

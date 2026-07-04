@@ -25,3 +25,6 @@ images:
   - name: todo-frontend-placeholder-image       # 👈 Replace with the exact 'image' string currently in your frontend-deployment.yaml
     newName: rakhicc/todo-frontend
     newTag: gke-v1
+  - name: broadcaster-placeholder-image
+    newName: rakhicc/broadcaster
+    newTag: gke-v1 
