@@ -4,6 +4,6 @@ metadata:
   name: todo-backend-config
 data:
   PORT: "3000"
-  DB_HOST: "postgres-svc"
+  DB_HOST: "postgres-svc.project.svc.cluster.local"
   DB_PORT: "5432"
   DB_NAME: "tododb"
