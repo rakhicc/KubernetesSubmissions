@@ -73,7 +73,9 @@ await publishEvent({type: 'done',
     id, 
     text: result.rows[0].text });
     res.json(result.rows[0]);
-
+console.log('Publishing event:', { type: 'done', id, text: result.rows[0].text }
+  
+);
   } catch (err) {
     res.status(500).json({
       error: err.message
