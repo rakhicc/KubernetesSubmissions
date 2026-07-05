@@ -14,6 +14,7 @@ const connectNats = async () => {
 };
 
 const publishEvent = async (payload) => {
+    console.log('Publishing:', payload);
   if (!nc) {
     console.log('NATS not connected');
     return;
