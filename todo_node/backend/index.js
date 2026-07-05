@@ -23,6 +23,7 @@ app.use(cors());
 
 
 const initDB = async () => {
+  console.log('Creating database schema...');
   await pool.query(`
     CREATE TABLE IF NOT EXISTS todos (
       id SERIAL PRIMARY KEY,
@@ -115,12 +116,13 @@ app.post('/break', (req, res) =>
 
         async function start() {
   try {
+    await initDB();
     try {
          await connectNats();
               console.log('NATS connected');  } 
               catch (err) {
                     console.error('NATS connection failed:', err);    }
-    await initDB();
+    
 
     app.listen(PORT, () => {
       console.log(`Backend running on ${PORT}`);
