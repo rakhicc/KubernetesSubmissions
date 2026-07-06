@@ -129,3 +129,8 @@ count(
   kube_pod_info{namespace="prometheus", owner_kind="StatefulSet"}
 )
 
+
+
+## Exercise 4.8 - The project, step 24
+
+application.yaml added to create argocd application of project
