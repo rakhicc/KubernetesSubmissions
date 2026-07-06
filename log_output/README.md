@@ -16,3 +16,8 @@ accessing the resource http://localhost:8081/ shows result which includes timest
 
 Note that Ingress expects a service to give a successful response in the path / even if the service is mapped to some other path!
 
+## Exercise 4.7 - Baby steps to GitOps
+
+The screenshot below shows the application Log output application is enabled to use GitOps so that when you commit to the repository, the application is automatically updated.
+![alt text](<Screenshot 2026-07-06 at 11.27.19.png>)
+
