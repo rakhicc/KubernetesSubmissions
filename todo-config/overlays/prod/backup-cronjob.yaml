@@ -1,0 +1,65 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgres-backup
+  namespace: project
+spec:
+  schedule: "0 0 * * *"   # once every 24 hours
+
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+
+          volumes:
+            - name: gcp-creds
+              secret:
+                secretName: storage-sa-key
+
+          containers:
+            - name: backup
+
+              image: google/cloud-sdk:slim
+
+              volumeMounts:
+                - name: gcp-creds
+                  mountPath: /var/secrets/google
+                  readOnly: true
+
+              env:
+                - name: GOOGLE_APPLICATION_CREDENTIALS
+                  value: /var/secrets/google/key.json
+
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgres-secret
+                      key: password
+                - name: PGUSER
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgres-secret
+                      key: user
+
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  apt-get update &&
+                  apt-get install -y postgresql-client &&
+
+                  DATE=$(date +%Y%m%d-%H%M%S)
+
+                  pg_dump \
+                    -h postgres-svc \
+                    -U $PGUSER \
+                    -d tododb \
+                    > /tmp/todo-backup-$DATE.sql
+
+                  gcloud auth activate-service-account \
+                    --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+
+                  gcloud storage cp \
+                    /tmp/todo-backup-$DATE.sql \
+                    gs://todo-backups-rakhi/

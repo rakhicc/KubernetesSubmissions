@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-backend
+spec:
+  template:
+    spec:
+      containers:
+      - name: todobackend
+        env:
+        - name: ENVIRONMENT
+          value: production
+
+        - name: BROADCAST_ENABLED
+          value: "true"
+
+        - name: BACKUP_ENABLED
+          value: "true"
