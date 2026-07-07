@@ -3,7 +3,7 @@ const { connect, StringCodec } = require('nats');
 const sc = StringCodec();
 
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
-
+const ENVIRONMENT = process.env.ENVIRONMENT || 'production';
 const start = async () => {
 
   const nc = await connect({
@@ -39,7 +39,7 @@ const start = async () => {
       message =
         `Todo marked done: ${event.text}`;
     }
-
+if (ENVIRONMENT === 'production') {
     try {
 
       await fetch(
@@ -64,6 +64,10 @@ const start = async () => {
         'Webhook failed',
         err
       );
+    }
+    } else {
+      console.log('Skipping webhook in production');
+      console.log('Event:', event);
     }
   }
 };
