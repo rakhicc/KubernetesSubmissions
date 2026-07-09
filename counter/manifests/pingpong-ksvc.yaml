@@ -1,0 +1,15 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: pingpong
+  namespace: exercises
+spec:
+  template:
+    spec:
+      containers:
+        - image: rakhicc/ping-pong:v12 # Use your actual image
+          ports:
+            - containerPort: 3007 # Use your app's actual port
+          env:
+            - name: PORT
+              value: "3007"

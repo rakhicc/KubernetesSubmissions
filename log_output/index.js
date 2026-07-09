@@ -10,7 +10,7 @@ const fileContentPath = '/etc/config/information.txt';
 const getPingCount = () => {
     console.log("Fetching ping count from ping-pong service...");
   return new Promise((resolve) => {
-    http.get('http://ping-pong-svc:80/pings', (res) => {
+    http.get('http://pingpong.exercises.svc.cluster.local/pings', (res) => {
       let data = '';
 
       res.on('data', chunk => data += chunk);
