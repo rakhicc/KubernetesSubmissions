@@ -19,8 +19,15 @@ const getPingCount = () => {
     }).on('error', () => resolve('0')); // fallback
   });
 };
-
-
+const getGreeting = async () => {
+  try {
+    const response = await fetch('http://greeter-svc:80');
+    return response.text();
+  } catch (err) {
+    console.error(err);
+    return 'Greeting unavailable';
+  }
+};
 const server = http.createServer(async (req, res) => {
   // 2. FIXED: Added native GKE Ingress Root / Health Check Handler
   if (req.url === '/') {
@@ -54,13 +61,15 @@ if (req.url === '/health') {
 
     const message = process.env.MESSAGE || "no message";
 
+    const greeting = await getGreeting();
     res.writeHead(200);
     
 res.end(
       `file content: ${fileContent}\n` +
       `env variable: MESSAGE=${message}\n` +
       `${timestamp}: ${randomString}\n` +
-      `Ping / Pongs: ${pingCount}`
+      `Ping / Pongs: ${pingCount}\n` +
+      `Greeting: ${greeting}\n`
     );
 return;
   }

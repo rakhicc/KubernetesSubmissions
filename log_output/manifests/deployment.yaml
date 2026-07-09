@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: log-output
-  namespace: exercises
 spec:
   replicas: 1
   selector:
@@ -15,7 +14,7 @@ spec:
     spec:
       containers:
         - name: log-output
-          image: rakhicc/log-output-node:v11
+          image: rakhicc/log-output-node:v15
           readinessProbe:
             httpGet:
               path: /health
