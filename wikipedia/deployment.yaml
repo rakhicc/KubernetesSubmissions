@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wikipedia-app
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: wikipedia-app
+
+  template:
+    metadata:
+      labels:
+        app: wikipedia-app
+
+    spec:
+
+      volumes:
+        - name: wikipedia-content
+          emptyDir: {}
+
+      initContainers:
+        - name: init-wikipedia
+
+          image: curlimages/curl:latest
+
+          command:
+            - sh
+            - -c
+            - |
+              curl -L https://en.wikipedia.org/wiki/Kubernetes \
+              -o /usr/share/nginx/html/index.html
+
+          volumeMounts:
+            - name: wikipedia-content
+              mountPath: /usr/share/nginx/html
+
+      containers:
+
+        # Main container
+        - name: nginx
+
+          image: nginx:alpine
+
+          ports:
+            - containerPort: 80
+
+          volumeMounts:
+            - name: wikipedia-content
+              mountPath: /usr/share/nginx/html
+
+        # Sidecar
+        - name: wikipedia-updater
+
+          image: curlimages/curl:latest
+
+          command:
+            - sh
+            - -c
+            - |
+              while true
+              do
+                SLEEP=$((300 + RANDOM % 600))
+                sleep $SLEEP
+
+                curl -L \
+                  https://en.wikipedia.org/wiki/Special:Random \
+                  -o /usr/share/nginx/html/index.html
+
+                echo "Wikipedia page updated"
+              done
+
+          volumeMounts:
+            - name: wikipedia-content
+              mountPath: /usr/share/nginx/html
