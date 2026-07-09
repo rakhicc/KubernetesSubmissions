@@ -31,13 +31,15 @@ Installed:
 
 ```bash
 kubectl get pods -n knative-serving
-
+```
 ![alt text](image.png)
+
+```bash
 kubectl get pods -n kourier-system
+```
 
 ![alt text](image-1.png)
 
-```
 
 All pods were in Running state.
 
@@ -69,9 +71,10 @@ Verified:
 
 ```bash
 kubectl get pods -w
+```
 
 ![alt text](image-3.png)
-```
+
 
 Knative automatically scaled the service based on traffic.
 
@@ -83,9 +86,9 @@ Verified using:
 
 ```bash
 kubectl get revisions
+```
 
 ![alt text](image-4.png)
-```
 
 and confirmed traffic distribution between revisions.
 
