@@ -43,7 +43,7 @@
 - [3.8. The project, step 17](https://github.com/rakhicc/KubernetesSubmissions/tree/3.8/todo_node)
 - [3.9. DBaaS vs DIY](https://github.com/rakhicc/KubernetesSubmissions/tree/3.9)
 - [3.10. The project, step 18](https://github.com/rakhicc/KubernetesSubmissions/tree/3.10/todo_node)
-- [3.11. The project, step 19](hhttps://github.com/rakhicc/KubernetesSubmissions/tree/3.11/todo_node)
+- [3.11. The project, step 19](https://github.com/rakhicc/KubernetesSubmissions/tree/3.11/todo_node)
 - [3.12. The project, step 20](https://github.com/rakhicc/KubernetesSubmissions/tree/3.12/todo_node)
 
 ### chapter 5
